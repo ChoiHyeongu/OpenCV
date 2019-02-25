@@ -54,7 +54,7 @@ Java_songpatechnicalhighschool_motivation_opencvwithcmake2_MainActivity_loadCasc
 }
 
 extern "C"
-JNIEXPORT void JNICALL
+JNIEXPORT jint JNICALL
 Java_songpatechnicalhighschool_motivation_opencvwithcmake2_MainActivity_detect(JNIEnv *env, jobject instance,
                                                                   jlong cascadeClassifier_face,
                                                                   jlong cascadeClassifier_eye,
@@ -63,6 +63,8 @@ Java_songpatechnicalhighschool_motivation_opencvwithcmake2_MainActivity_detect(J
 
     Mat &img_input = *(Mat *) matAddrInput;
     Mat &img_result = *(Mat *) matAddrResult;
+
+    int ret = 0;
 
     img_result = img_input.clone();
 
@@ -79,6 +81,7 @@ Java_songpatechnicalhighschool_motivation_opencvwithcmake2_MainActivity_detect(J
     ((CascadeClassifier *) cascadeClassifier_face)->detectMultiScale( img_resize, faces, 1.1, 2, 0|CASCADE_SCALE_IMAGE, Size(30, 30) );
 
     __android_log_print(ANDROID_LOG_DEBUG, (char *) "native-lib :: ", (char *) "face %d found ", faces.size());
+    ret = faces.size();
 
     for (int i = 0; i < faces.size(); i++) {
         double real_facesize_x = faces[i].x / resizeRatio;
@@ -107,6 +110,8 @@ Java_songpatechnicalhighschool_motivation_opencvwithcmake2_MainActivity_detect(J
 
         }
     }
+
+    return ret;
 }
 
 

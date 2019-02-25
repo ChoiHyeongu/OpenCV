@@ -38,7 +38,7 @@ class MainActivity : AppCompatActivity(), CameraBridgeViewBase.CvCameraViewListe
 
     //external fun ConvertRGBtoGray(matAddrInput: Long, matAddrResult: Long)
     external fun loadCascade(cascadeFileName: String): Long
-    external fun detect(cascadeClassifier_face: Long, cascadeClassifier_eye: Long, matAddrInput: Long, matAddrResult: Long)
+    external fun detect(cascadeClassifier_face: Long, cascadeClassifier_eye: Long, matAddrInput: Long, matAddrResult: Long): Int
     var cascadeClassifier_face: Long = 0
     var cascadeClassifier_eye: Long = 0
 
@@ -155,7 +155,8 @@ class MainActivity : AppCompatActivity(), CameraBridgeViewBase.CvCameraViewListe
 
             //ConvertRGBtoGray(matInput.nativeObj, matResult.nativeObjAddr)
             Core.flip(matInput, matInput, 1)
-            detect(cascadeClassifier_face, cascadeClassifier_eye, matInput.nativeObjAddr, matResult.nativeObjAddr)
+            var numOfFace= detect(cascadeClassifier_face, cascadeClassifier_eye, matInput.nativeObjAddr, matResult.nativeObjAddr)
+            if(numOfFace !== 0) Log.d(TAG, "Face $numOfFace was founded")
             Log.d(TAG, "detect")
 
         } catch (e: InterruptedException) {
