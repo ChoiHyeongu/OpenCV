@@ -13,6 +13,13 @@
         android:layout_gravity="center"
         android:text="캡쳐" />
 
+    <Button
+        android:id="@+id/imageDetect"
+        android:text="이미지 인식"
+        android:layout_gravity="center"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
     <org.opencv.android.JavaCameraView
         android:id="@+id/activity_surface_view"
         android:layout_width="match_parent"

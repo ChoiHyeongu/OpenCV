@@ -86,7 +86,7 @@ class MainActivity : AppCompatActivity(), CameraBridgeViewBase.CvCameraViewListe
 
         activity_surface_view.visibility = SurfaceView.VISIBLE
         activity_surface_view.setCvCameraViewListener(this)
-        activity_surface_view.setCameraIndex(1)
+        activity_surface_view.setCameraIndex(0)
         loaderCallback.onManagerConnected(LoaderCallbackInterface.SUCCESS)
         Log.d(TAG, "LoaderCallback")
 
@@ -111,6 +111,11 @@ class MainActivity : AppCompatActivity(), CameraBridgeViewBase.CvCameraViewListe
                 e.printStackTrace()
             }
             releaseWriteLock()
+        }
+
+        imageDetect.setOnClickListener{
+            val intent = Intent(applicationContext, ImageActivity::class.java)
+            startActivity(intent)
         }
     }
 
