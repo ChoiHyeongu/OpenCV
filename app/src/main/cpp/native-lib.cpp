@@ -203,7 +203,6 @@ Java_songpatechnicalhighschool_motivation_opencvwithcmake2_ImageActivity_detect(
             Point eye_center( real_facesize_x + eyes[j].x + eyes[j].width/2, real_facesize_y + eyes[j].y + eyes[j].height/2 );
             int radius = cvRound( (eyes[j].width + eyes[j].height)*0.25 );
             circle( img_result, eye_center, radius, Scalar( 255, 0, 0 ), 30, 8, 0 );
-
         }
     }
 
