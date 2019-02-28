@@ -86,7 +86,7 @@ class MainActivity : AppCompatActivity(), CameraBridgeViewBase.CvCameraViewListe
 
         activity_surface_view.visibility = SurfaceView.VISIBLE
         activity_surface_view.setCvCameraViewListener(this)
-        activity_surface_view.setCameraIndex(0)
+        activity_surface_view.setCameraIndex(1 )
         loaderCallback.onManagerConnected(LoaderCallbackInterface.SUCCESS)
         Log.d(TAG, "LoaderCallback")
 
