@@ -150,7 +150,7 @@ Java_songpatechnicalhighschool_motivation_opencvwithcmake2_ImageActivity_loadCas
 }
 
 extern "C"
-JNIEXPORT std::vector<Rect> JNICALL
+JNIEXPORT jintArray JNICALL
 Java_songpatechnicalhighschool_motivation_opencvwithcmake2_ImageActivity_detect(JNIEnv *env, jobject instance,
                                                                   jlong cascadeClassifier_face,
                                                                   jlong cascadeClassifier_eye,
@@ -174,14 +174,14 @@ Java_songpatechnicalhighschool_motivation_opencvwithcmake2_ImageActivity_detect(
     float resizeRatio = resize(img_gray, img_resize, 640);
     ((CascadeClassifier *) cascadeClassifier_face)->detectMultiScale( img_resize, faces, 1.1, 2, 0|CASCADE_SCALE_IMAGE, Size(30, 30) );
 
-    jclass rectClass = env->FindClass("android/graphics/Rect");
-    jmethodID mCtor = env->GetMethodID(rectClass, "<init>", "()V");
-    jmethodID mAdd = env->GetMethodID(rectClass, "add", "(Ljava/lang/Object;)Z");
-    jobject resultArray = env->NewObject(rectClass, mCtor);
+    jintArray rectArray = (env)->NewIntArray(faces.size());
 
+    jint *ptrArray = env->GetIntArrayElements(rectArray, 0);
+    ptrArray[0] = faces[0].x;
+    ptrArray[1] = faces[0].y;
+    env -> ReleaseIntArrayElements(rectArray, ptrArray, 0);
 
-
-    return resultArray;
+    return rectArray;
 }
 
 
