@@ -174,7 +174,14 @@ Java_songpatechnicalhighschool_motivation_opencvwithcmake2_ImageActivity_detect(
     float resizeRatio = resize(img_gray, img_resize, 640);
     ((CascadeClassifier *) cascadeClassifier_face)->detectMultiScale( img_resize, faces, 1.1, 2, 0|CASCADE_SCALE_IMAGE, Size(30, 30) );
 
-    return faces;
+    jclass rectClass = env->FindClass("android/graphics/Rect");
+    jmethodID mCtor = env->GetMethodID(rectClass, "<init>", "()V");
+    jmethodID mAdd = env->GetMethodID(rectClass, "add", "(Ljava/lang/Object;)Z");
+    jobject resultArray = env->NewObject(rectClass, mCtor);
+
+
+
+    return resultArray;
 }
 
 

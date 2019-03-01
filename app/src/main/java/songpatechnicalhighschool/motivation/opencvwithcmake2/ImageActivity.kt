@@ -42,7 +42,7 @@ class ImageActivity : AppCompatActivity() {
     }
 
 
-    external fun detect(cascadeClassifier_face: Long, cascadeClassifier_eye: Long, matAddrInput: Long, matAddrResult: Long): Vector<Rect>
+    external fun detect(cascadeClassifier_face: Long, cascadeClassifier_eye: Long, matAddrInput: Long, matAddrResult: Long): ArrayList<Rect>
     external fun loadCascade(cascadeFileName: String): Long
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -96,8 +96,9 @@ class ImageActivity : AppCompatActivity() {
 
             //ConvertRGBtoGray(matInput.nativeObj, matResult.nativeObjAddr)
             Core.flip(matInput, matInput, 1)
-            var faces = detect(cascadeClassifier_face, cascadeClassifier_eye, matInput.nativeObjAddr, matResult.nativeObjAddr)
-            Log.d("Image Detect", "Faces : $faces")
+            Log.d("Image Detect", "Before detect")
+            detect(cascadeClassifier_face, cascadeClassifier_eye, matInput.nativeObjAddr, matResult.nativeObjAddr)
+            //Log.d("Image Detect", "Return : $faces")
             Log.d("Image Detect", "detect")
 
         } catch (e: InterruptedException) {
