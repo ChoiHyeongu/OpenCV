@@ -179,6 +179,8 @@ Java_songpatechnicalhighschool_motivation_opencvwithcmake2_ImageActivity_detect(
     jint *ptrArray = env->GetIntArrayElements(rectArray, 0);
     ptrArray[0] = faces[0].x;
     ptrArray[1] = faces[0].y;
+    ptrArray[2] = faces[0].width;
+    ptrArray[3] = faces[0].height;
     env -> ReleaseIntArrayElements(rectArray, ptrArray, 0);
 
     return rectArray;

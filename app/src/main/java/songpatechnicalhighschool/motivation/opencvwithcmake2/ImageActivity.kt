@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.graphics.*
+import android.graphics.drawable.BitmapDrawable
 import android.net.Uri
 import android.os.Build
 import android.support.v7.app.AppCompatActivity
@@ -25,6 +26,7 @@ import java.util.concurrent.Semaphore
 
 class ImageActivity : AppCompatActivity() {
 
+    lateinit var img: Bitmap
     lateinit var uri: Uri
     private var matInput = Mat()
     private var matResult = Mat()
@@ -57,9 +59,6 @@ class ImageActivity : AppCompatActivity() {
             startActivityForResult(intent, 1)
         }
 
-        detectFaceButton.setOnClickListener {
-            faceDetect()
-        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -69,9 +68,10 @@ class ImageActivity : AppCompatActivity() {
                     uri = data!!.data
                     Toast.makeText(this, uri.toString(), Toast.LENGTH_LONG).show()
                     val input: InputStream = contentResolver.openInputStream(data!!.data)
-                    val img: Bitmap = BitmapFactory.decodeStream(input)
+                    img = BitmapFactory.decodeStream(input)
                     imageView.setImageBitmap(img)
                     input.close()
+                    faceDetect()
                 } catch (e: Exception) {
                     e.printStackTrace()
                 }
@@ -97,11 +97,31 @@ class ImageActivity : AppCompatActivity() {
             Core.flip(matInput, matInput, 1)
             Log.d("Image Detect", "Before detect")
             val faces = detect(cascadeClassifier_face, cascadeClassifier_eye, matInput.nativeObjAddr, matResult.nativeObjAddr)
-            Log.d("Image Detect", "Return : ${faces[0]}, ${faces[1]}")
+            Log.d("Image Detect", "Return : ${faces[0]}, ${faces[1]}, ${faces[2]}, ${faces[3]}")
             Log.d("Image Detect", "detect")
-            val viewEx = ViewEx(this, faces[0].toFloat(), faces[1].toFloat())
-            setContentView(viewEx)
 
+            val pnt = Paint()
+            pnt.color = Color.GREEN
+            pnt.strokeWidth = 5F
+            pnt.style = Paint.Style.STROKE
+
+            val myRectPaint = Paint()
+            myRectPaint.strokeWidth = 3F
+            myRectPaint.color = Color.RED
+            myRectPaint.style = Paint.Style.STROKE
+
+            val tempBitmap = Bitmap.createBitmap(img.width, img.height, Bitmap.Config.RGB_565)
+            val tempCanvas = Canvas(tempBitmap)
+            tempCanvas.drawBitmap(img, 0F, 0F, null)
+
+            val x1 = faces[0]
+            val y1 = faces[1]
+            val x2 = x1+faces[2]
+            val y2 = y1+faces[3]
+
+            tempCanvas.drawCircle(x2.toFloat(), y2.toFloat(), 10F, myRectPaint)
+
+            imageView.setImageDrawable(BitmapDrawable(resources, tempBitmap))
         } catch (e: InterruptedException) {
             e.printStackTrace()
         }
@@ -165,22 +185,6 @@ class ImageActivity : AppCompatActivity() {
         cascadeClassifier_eye = loadCascade("haarcascade_eye_tree_eyeglasses.xml")
         Log.d("FragmentActivity.TAG", "read_cascade_file:")
     }
-
-
-    class ViewEx : View {
-        constructor(context: Context?) : super(context)
-        constructor(context: Context?, x: Float, y: Float) : super(context)
-        val x2 = x
-        val y2 = y
-
-        override fun onDraw(canvas: Canvas?) {
-            val paint = Paint()
-            paint.color = Color.BLACK
-            paint.strokeWidth = 50F
-            canvas!!.drawPoint(x2, y2, paint)
-        }
-    }
-
 }
 
 
